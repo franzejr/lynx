@@ -19,8 +19,8 @@ defmodule Lynx.Laws do
             """
       end
 
-  Call `Sum.sum_empty/0` to check the law at runtime. Add a `proof: ~LEAN"..."`
-  option to verify it with `Lynx.Laws.verify!([Sum])`.
+  Call `Sum.sum_empty/0` to check the law at runtime. Replace the proof placeholder
+  with a Lean proof, then call `Lynx.Laws.verify!([Sum])` to verify it.
 
   ## Erlang example
 
@@ -189,7 +189,7 @@ defmodule Lynx.Laws do
   Besides defining a law, this macro also defines a public function that you can
   invoke passing Elixir values. Elixir will then validate said values against the
   given `:requires`, the given `:expects`, and return true when both predicates
-  succeed, otherwise it will raise. This is useful to provide counter examples.
+  succeed, otherwise it will raise. This is useful to provide counterexamples.
   """
   defmacro law(call, opts) do
     {_name, definition} = __law__(__CALLER__, call, opts)

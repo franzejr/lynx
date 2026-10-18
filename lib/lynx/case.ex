@@ -39,7 +39,7 @@ defmodule Lynx.Case do
   @doc false
   def __register__(module) do
     unless Module.has_attribute?(module, :ex_unit_tests) do
-      raise ArgumentError, "you must Lynx.Case after use ExUnit.Case"
+      raise ArgumentError, "you must use Lynx.Case after use ExUnit.Case"
     end
 
     ExUnit.plural_rule("laws", "laws")
@@ -59,7 +59,7 @@ defmodule Lynx.Case do
   @doc """
   Defines a callable law and includes it in the current laws group.
 
-  The must be explicitly declared in a `laws/2` block.
+  The law must be explicitly declared in a `laws/2` block.
 
   ## Options
 
@@ -72,7 +72,7 @@ defmodule Lynx.Case do
   Besides defining a law, `law/2` also defines a public function that you can
   invoke passing Elixir values. Elixir will then validate said values against the
   given `:requires`, the given `:expects`, and return true when both predicates
-  succeed, otherwise it will raise. This is useful to provide counter examples.
+  succeed, otherwise it will raise. This is useful to provide counterexamples.
   """
   defmacro law(call, opts) do
     {name, definition} = Lynx.Laws.__law__(__CALLER__, call, opts)
@@ -245,8 +245,8 @@ defmodule Lynx.Case do
           proof: ~LEAN"exact requires"
       end
 
-  If verifying the laws fail, the error report includes the path to folder with
-  all `.lean` files. Use this to debug and guide your proofs.
+  If verification of the laws fails, the error report includes the path to the
+  folder containing all `.lean` files. Use this to debug and guide your proofs.
   """
   defmacro laws(description, opts \\ [], do: block) do
     definition =

@@ -3,7 +3,7 @@ defmodule Lynx do
   Lynx allows you to write proofs about Erlang/Elixir programs using Lean.
 
   This is done by writing laws, in Erlang/Elixir, with a Lean proof
-  that guarantees your Erlang/Elixir code obey those laws. This is done
+  that guarantees your Erlang/Elixir code obeys those laws. This is done
   by implementing a model of the Erlang runtime in Lean and automatically
   translating your Erlang/Elixir code to Lean.
 
@@ -21,21 +21,21 @@ defmodule Lynx do
 
   ## Writing proofs
 
-  When you write a law, Lynx will translate all functions and all of its dependencies
+  When you write a law, Lynx will translate the law and all of its dependencies
   to Lean. Modules are translated following a clear rule:
 
   * Erlang modules become `Erlang.module_name` in Lean
   * Elixir modules become `Elixir.ModuleName` in Lean
-  * Function names are have the shape `«fun/arity»`
+  * Function names have the shape `«fun/arity»`
 
-  Each argument is an Erlang term which is modelled as `Lynx.Term`. Each function
-  returns a `Lynx.Result`, which returns `ok`, `error` (in case of exceptions),
-  and other possible statuses code.
+  Each argument is an Erlang term which is modelled as `Lynx.Term`. Pure functions
+  return `Except Lynx.Exception Lynx.Term`. Functions that consult the runtime or
+  perform process effects return `Lynx.Result`. See the purity model below.
 
   For example, `:lists.sum/1` will become `Erlang.lists.«sum/1»` in Lean with the
   following signature:
 
-      def «sum/1» (_0 : Lynx.Term) : Lynx.Result
+      def «sum/1» (_0 : Lynx.Term) : Except Lynx.Exception Lynx.Term
 
   Each law becomes a Lean theorem whose parameters are the law's arguments, whose
   hypothesis states that `requires:` returns `true`, and whose goal states that
@@ -47,7 +47,7 @@ defmodule Lynx do
   in order to best understand the constructs when writing proofs.
 
   Furthermore, when running proofs with ExUnit, the error reports include the path to
-  folder with all `.lean` files. Use this to debug and guide your proofs.
+  the folder containing all `.lean` files. Use this to debug and guide your proofs.
 
   ### Purity model
 
